@@ -1,0 +1,5 @@
+<list model="ldap">
+    <field name="domain"/>
+    <field name="server"/>
+    <field name="is_default"/>
+</list>

@@ -1,0 +1,5 @@
+<inherit inherit="gen_menu">
+    <item string="Roles" position="after">
+        <item string="LDAP Authentication" action="ldap"/>
+    </item>
+</inherit>

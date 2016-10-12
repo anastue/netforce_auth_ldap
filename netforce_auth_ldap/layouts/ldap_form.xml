@@ -1,0 +1,13 @@
+<form model="ldap">
+    <field name="domain"/>
+    <field name="server"/>
+    <field name="port"/>
+    <field name="is_default"/>
+    <separator string="BaseDN"/>
+    <field name="lines" nolabel="1" span="6">
+        <list>
+            <field name="option"/>
+            <field name="value"/>
+        </list>
+    </field>
+</form>
