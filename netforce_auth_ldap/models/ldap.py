@@ -1,7 +1,5 @@
 # LDAP3
 from ldap3 import Server, Connection, AUTH_SIMPLE, STRATEGY_SYNC, ALL
-import getpass 
-import ldap3 as ldap
 
 from netforce.model import Model, fields
 from netforce import database
