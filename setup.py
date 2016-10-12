@@ -8,7 +8,6 @@ setup(
     description="Ldap Module",
     install_requires=[
         "ldap3>=1.4.0",
-        "python-ldap",
         "python3-ldap"
     ],
 
