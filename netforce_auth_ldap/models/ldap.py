@@ -1,5 +1,5 @@
 # LDAP3
-from ldap3 import Server, Connection, AUTH_SIMPLE, STRATEGY_SYNC, ALL
+from ldap3 import Server, Connection, AUTH_SIMPLE, STRATEGY_SYNC, ALL, SUBTREE
 
 from netforce.model import Model, fields
 from netforce import database
@@ -26,6 +26,7 @@ class Ldap(Model):
         #### domain\username
         print("*"*30,' LADP ',"*"*30)
         pprint(params)
+        user_ldap = params.get("username")
         print("*"*30,' LADP ',"*"*30)
         # set, search data, obj etc. -- start
         username = params.get("username")
@@ -36,11 +37,9 @@ class Ldap(Model):
             default_ids = self.search([['is_default','=',True]])
             if default_ids:
                 obj = self.browse(default_ids[0])
+                user_ldap = "%s\\%s"%(obj.domain_name.lower(),username)
             else:
-                return {
-                    'status' : False,
-                    'msg' : 'Not found default domain for LDAP'
-                }
+                return False
         else:
             domain_name, username = username.split("\\")
             domain_name = domain_name.lower()
@@ -48,32 +47,32 @@ class Ldap(Model):
             if obj_ids:
                 obj = self.browse(obj_ids[0])
             else:
-                return {
-                    'status' : False,
-                    'msg' : 'Not found domain name server %s for LDAP'%domain_name
-                }
+                return False
         # set, search data, obj etc. -- end
             
         # var for send to ldap -- start
         HOST = obj.server
         PORT = obj.port
-        server = Server(HOST, port=PORT, get_info=ALL)
+        server = Server(HOST)
         # var for send to ldap -- end
 
         # Connect ldap -- start
         cr = Connection(server, \
-            authentication=AUTH_SIMPLE,\
-            user=username,\
+            #authentication=AUTH_SIMPLE,\
+            user=user_ldap,\
             password=password,\
-            check_names=True,\
-            lazy=False,\
-            client_strategy=STRATEGY_SYNC,\
-            raise_exceptions=True) # use false for skip error
+            #check_names=True,\
+            #lazy=False,\
+            #client_strategy=STRATEGY_SYNC,\
+            #raise_exceptions=False
+        ) # use false for skip error
         # Connect ldap -- end
         try:
             cr.open()
-            cr.bind()
-            return cr.result
+            if not cr.bind():
+                return False
+            else:
+                return True
         except:
             return False
 
