@@ -37,7 +37,7 @@ class Ldap(Model):
             default_ids = self.search([['is_default','=',True]])
             if default_ids:
                 obj = self.browse(default_ids[0])
-                user_ldap = "%s\\%s"%(obj.domain_name.lower(),username)
+                user_ldap = "%s\\%s"%(obj.domain.lower(),username)
             else:
                 return False
         else:
